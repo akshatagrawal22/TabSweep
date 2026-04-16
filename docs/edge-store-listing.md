@@ -1,4 +1,4 @@
-# TabSweep — Microsoft Edge Add-ons Store Listing
+# Swoosh — Microsoft Edge Add-ons Store Listing
 
 ## Submission checklist
 
@@ -27,7 +27,7 @@ icons/
 
 Command:
 ```bash
-cd extension && zip -r ../tabsweep-1.3.0.zip . && cd ..
+cd extension && zip -r ../swoosh-1.3.0.zip . && cd ..
 ```
 
 ---
@@ -36,7 +36,7 @@ cd extension && zip -r ../tabsweep-1.3.0.zip . && cd ..
 
 ### Name
 ```
-TabSweep
+Swoosh
 ```
 
 ### Short description (max 250 characters)
@@ -47,7 +47,7 @@ Character count: 173 ✓
 
 ### Detailed description
 ```
-TabSweep replaces your new tab page with a dashboard that actually helps you manage your tabs.
+Swoosh replaces your new tab page with a dashboard that actually helps you manage your tabs.
 
 SEE EVERYTHING AT ONCE
 All your open tabs are grouped by domain on a clean grid. No more squinting at 30 tiny tab titles — you can see what you have open at a glance.
@@ -81,7 +81,7 @@ Productivity
 
 ### Privacy policy URL
 ```
-https://akshatagrawal22.github.io/TabSweep/privacy-policy.html
+https://akshatagrawal22.github.io/Swoosh/privacy-policy.html
 ```
 
 ---
@@ -104,9 +104,9 @@ Host permissions for `suggestqueries.google.com` and `www.google.com` are used t
 
 ## GitHub Pages setup (for privacy policy hosting)
 
-1. Go to github.com/akshatagrawal22/TabSweep → Settings → Pages
+1. Go to github.com/akshatagrawal22/Swoosh → Settings → Pages
 2. Source: Deploy from a branch → branch: `main` → folder: `/docs`
-3. Save — URL will be: `https://akshatagrawal22.github.io/TabSweep/privacy-policy.html`
+3. Save — URL will be: `https://akshatagrawal22.github.io/Swoosh/privacy-policy.html`
 
 Wait ~5 minutes for GitHub Pages to publish before submitting.
 
@@ -116,7 +116,7 @@ Wait ~5 minutes for GitHub Pages to publish before submitting.
 
 1. Go to partner.microsoft.com/en-us/dashboard → register with a Microsoft account (free)
 2. Dashboard → Add-ons → New extension
-3. Upload `tabsweep-1.3.0.zip`
+3. Upload `swoosh-1.3.0.zip`
 4. Fill in listing: name, descriptions, category (Productivity)
 5. Paste privacy policy URL
 6. Upload screenshot(s)

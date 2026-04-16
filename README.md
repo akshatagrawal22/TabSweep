@@ -1,8 +1,8 @@
-<h1 align="left"><img src="extension/icons/icon.svg" width="32" valign="middle" /> TabSweep</h1>
+<h1 align="left"><img src="extension/icons/icon.svg" width="32" valign="middle" /> Swoosh</h1>
 
 **Keep tabs on your tabs.**
 
-TabSweep replaces your Chrome new tab page with a dashboard that shows everything you have open -- grouped by domain, with landing pages (Gmail, X, LinkedIn, etc.) pulled into their own group for easy cleanup. Close tabs with a satisfying swoosh + confetti.
+Swoosh replaces your Chrome new tab page with a dashboard that shows everything you have open -- grouped by domain, with landing pages (Gmail, X, LinkedIn, etc.) pulled into their own group for easy cleanup. Close tabs with a satisfying swoosh + confetti.
 
 Built for people who open too many tabs and never close them.
 
@@ -11,7 +11,7 @@ Built for people who open too many tabs and never close them.
 ## Install
 
 ### Option 1: Download Release (Recommended)
-1. Download the latest `TabSweep.zip` from the [Releases page](https://github.com/akshatagrawal22/TabSweep/releases)
+1. Download the latest `Swoosh.zip` from the [Releases page](https://github.com/akshatagrawal22/Swoosh/releases)
 2. Unzip the file
 3. Go to `chrome://extensions` in Chrome
 4. Enable **Developer mode** (top-right toggle)
@@ -25,7 +25,7 @@ Built for people who open too many tabs and never close them.
 4. Click **Load unpacked**
 5. Select the `extension/` folder from this repo
 
-Open a new tab — you'll see TabSweep.
+Open a new tab — you'll see Swoosh.
 
 ---
 

@@ -1,5 +1,5 @@
 /* ================================================================
-   TabSweep — Dashboard App
+   Swoosh — Dashboard App
 
    This file is the brain of the dashboard. It:
    1. Talks to the Chrome extension (to read/close actual browser tabs)
@@ -378,7 +378,7 @@ function timeAgo(dateStr) {
  *
  * Returns an appropriate greeting based on the current hour.
  * Morning = before noon, Afternoon = noon–5pm, Evening = after 5pm.
- * No name — TabSweep is for everyone now.
+ * No name — Swoosh is for everyone now.
  */
 function getGreeting() {
   const hour = new Date().getHours();
@@ -421,46 +421,6 @@ function startClock() {
    FREQUENT SITES + QUOTE + GOOGLE SEARCH
    ---------------------------------------------------------------- */
 
-const QUOTES = [
-  { text: 'Perfection is achieved not when there is nothing more to add, but when there is nothing left to take away.', author: 'Antoine de Saint-Exupéry' },
-  { text: 'The best way to predict the future is to invent it.', author: 'Alan Kay' },
-  { text: 'Simplicity is the ultimate sophistication.', author: 'Leonardo da Vinci' },
-  { text: 'A place for everything, everything in its place.', author: 'Benjamin Franklin' },
-  { text: 'The ability to simplify means to eliminate the unnecessary so that the necessary may speak.', author: 'Hans Hofmann' },
-  { text: 'Focus is a matter of deciding what things you\'re not going to do.', author: 'John Carmack' },
-  { text: 'It is not enough to be busy. The question is: what are we busy about?', author: 'Henry David Thoreau' },
-  { text: 'Less is more.', author: 'Ludwig Mies van der Rohe' },
-  { text: 'Clarity is the counterbalance of profound thoughts.', author: 'Luc de Clapiers' },
-  { text: 'The secret of getting ahead is getting started.', author: 'Mark Twain' },
-  { text: 'You can do anything, but not everything.', author: 'David Allen' },
-  { text: 'Absorb what is useful, discard what is useless.', author: 'Bruce Lee' },
-];
-
-function renderQuote() {
-  const el = document.getElementById('dailyQuote');
-  if (!el) return;
-  const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
-  el.innerHTML = `\u201C${q.text}\u201D<span class="quote-author">\u2014 ${q.author}</span>`;
-}
-
-async function renderFrequentSites() {
-  const el = document.getElementById('frequentSites');
-  if (!el) return;
-  try {
-    const sites = await chrome.topSites.get();
-    const publicSites = sites.filter(s => {
-      try {
-        const h = new URL(s.url).hostname;
-        return h && h !== 'localhost' && !h.startsWith('127.') && !h.startsWith('192.168.') && !h.startsWith('10.');
-      } catch { return false; }
-    });
-    el.innerHTML = publicSites.slice(0, 5).map(site => {
-      const domain = new URL(site.url).hostname;
-      const favicon = site.favIconUrl || `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
-      return `<a href="${site.url}" title="${site.title}" class="freq-site-icon"><img src="${favicon}" width="24" height="24" alt="${site.title}" class="favicon-img"></a>`;
-    }).join('');
-  } catch { el.style.display = 'none'; }
-}
 
 /* ----------------------------------------------------------------
    SVG ICON STRINGS
@@ -832,22 +792,22 @@ function getRealTabs() {
 }
 
 /**
- * checkTabSweepDupes()
+ * checkSwooshDupes()
  *
- * Counts how many TabSweep new-tab pages are open. If more than 1,
+ * Counts how many Swoosh new-tab pages are open. If more than 1,
  * shows a banner offering to close the extras.
  */
-function checkTabSweepDupes() {
-  const tabSweepTabs = openTabs.filter(t =>
+function checkSwooshDupes() {
+  const swooshTabs = openTabs.filter(t =>
     t.url === 'chrome://newtab/' || t.url === 'edge://newtab/' || t.url === 'about:newtab'
   );
 
-  const banner  = document.getElementById('tabSweepDupeBanner');
-  const countEl = document.getElementById('tabSweepDupeCount');
+  const banner  = document.getElementById('swooshDupeBanner');
+  const countEl = document.getElementById('swooshDupeCount');
   if (!banner) return;
 
-  if (tabSweepTabs.length > 1) {
-    if (countEl) countEl.textContent = tabSweepTabs.length;
+  if (swooshTabs.length > 1) {
+    if (countEl) countEl.textContent = swooshTabs.length;
     banner.style.display = 'flex';
   } else {
     banner.style.display = 'none';
@@ -1102,7 +1062,7 @@ async function renderDeferredColumn() {
     }
 
   } catch (err) {
-    console.warn('[tabsweep] Could not load deferred tabs:', err);
+    console.warn('[swoosh] Could not load deferred tabs:', err);
     if (column.style.display !== 'none') {
       column.classList.add('hiding');
       column.addEventListener('transitionend', function handler(evt) {
@@ -1196,9 +1156,6 @@ async function renderStaticDashboard() {
   if (greetingEl) greetingEl.textContent = getGreeting();
   if (dateEl)     dateEl.textContent     = getDateDisplay();
 
-  renderQuote();
-  renderFrequentSites(); // fire-and-forget, doesn't block tab rendering
-
   // ── Step 1: Fetch open tabs ───────────────────────────────────────────────
   await fetchOpenTabs();
   const realTabs = getRealTabs();
@@ -1207,7 +1164,7 @@ async function renderStaticDashboard() {
   if (snapshot === lastTabSnapshot) {
     const statTabs = document.getElementById('statTabs');
     if (statTabs) statTabs.textContent = openTabs.length;
-    checkTabSweepDupes();
+    checkSwooshDupes();
     return;
   }
   lastTabSnapshot = snapshot;
@@ -1348,10 +1305,10 @@ async function renderStaticDashboard() {
   const staleBanner = document.getElementById('staleBanner');
   if (staleBanner) {
     if (staleTabs.length > 0) {
-      const label = document.getElementById('staleBannerLabel');
-      const list  = document.getElementById('staleBannerList');
-      const btn   = document.getElementById('staleBannerBtn');
-      if (label) label.innerHTML = `You have <strong>${staleTabs.length}</strong> stale tab${staleTabs.length !== 1 ? 's' : ''} idle for a while. Close them? <span class="stale-info-icon" data-tip="Tabs with no activity for 4+ hours">?</span>`;
+      const countEl = document.getElementById('staleBannerCount');
+      const list    = document.getElementById('staleBannerList');
+      const btn     = document.getElementById('staleBannerBtn');
+      if (countEl) countEl.textContent = staleTabs.length;
       if (btn) btn.textContent = `Close all`;
       if (list) list.innerHTML = staleTabs.map(t => {
         const encoded = encodeURIComponent(t.url);
@@ -1373,8 +1330,8 @@ async function renderStaticDashboard() {
   const statStale = document.getElementById('statStale');
   if (statStale) statStale.textContent = staleTabs.length;
 
-  // ── Check for duplicate TabSweep tabs ────────────────────────────────────
-  checkTabSweepDupes();
+  // ── Check for duplicate Swoosh tabs ────────────────────────────────────
+  checkSwooshDupes();
 
   // ── Step 9: Render the "Saved for Later" checklist column ────────────────
   await renderDeferredColumn();
@@ -1535,9 +1492,9 @@ document.addEventListener('click', async (e) => {
 
   const action = actionEl.dataset.action;
 
-  // --- Close duplicate TabSweep tabs ---
-  if (action === 'close-tabsweep-dupes') {
-    // Close all TabSweep new-tab pages except this one
+  // --- Close duplicate Swoosh tabs ---
+  if (action === 'close-swoosh-dupes') {
+    // Close all Swoosh new-tab pages except this one
     const all = await chrome.tabs.query({});
     const newTabUrls = ['chrome://newtab/', 'edge://newtab/', 'about:newtab'];
     const current = await chrome.tabs.getCurrent();
@@ -1545,13 +1502,13 @@ document.addEventListener('click', async (e) => {
     if (toClose.length > 0) await chrome.tabs.remove(toClose);
     await fetchOpenTabs();
     playCloseSound();
-    const banner = document.getElementById('tabSweepDupeBanner');
+    const banner = document.getElementById('swooshDupeBanner');
     if (banner) {
       banner.style.transition = 'opacity 0.4s';
       banner.style.opacity = '0';
       setTimeout(() => { banner.style.display = 'none'; banner.style.opacity = '1'; }, 400);
     }
-    showToast('Closed extra TabSweep tabs');
+    showToast('Closed extra Swoosh tabs');
     return;
   }
 
@@ -1629,7 +1586,7 @@ document.addEventListener('click', async (e) => {
     try {
       await insertDeferred({ url: tabUrl, title: tabTitle, favicon_url: faviconUrl });
     } catch (err) {
-      console.error('[tabsweep] Failed to defer tab:', err);
+      console.error('[swoosh] Failed to defer tab:', err);
       showToast('Failed to save tab');
       return;
     }
@@ -1660,7 +1617,7 @@ document.addEventListener('click', async (e) => {
     try {
       await updateDeferred(id, { checked: true });
     } catch (err) {
-      console.error('[tabsweep] Failed to check deferred tab:', err);
+      console.error('[swoosh] Failed to check deferred tab:', err);
       return;
     }
 
@@ -1687,7 +1644,7 @@ document.addEventListener('click', async (e) => {
     try {
       await updateDeferred(id, { dismissed: true });
     } catch (err) {
-      console.error('[tabsweep] Failed to dismiss deferred tab:', err);
+      console.error('[swoosh] Failed to dismiss deferred tab:', err);
       return;
     }
 
@@ -1716,8 +1673,8 @@ document.addEventListener('click', async (e) => {
     chip.style.opacity = '0';
     chip.style.transform = 'scale(0.8)';
     setTimeout(() => chip.remove(), 300);
-    const label = document.getElementById('staleBannerLabel');
-    if (label) label.innerHTML = `You have <strong>${currentStaleTabs.length}</strong> stale tab${currentStaleTabs.length !== 1 ? 's' : ''} idle for a while. Close them? <span class="stale-info-icon" data-tip="Tabs with no activity for 4+ hours">?</span>`;
+    const countEl = document.getElementById('staleBannerCount');
+    if (countEl) countEl.textContent = currentStaleTabs.length;
     if (currentStaleTabs.length === 0) {
       const staleBanner = document.getElementById('staleBanner');
       if (staleBanner) {
@@ -1747,7 +1704,7 @@ document.addEventListener('click', async (e) => {
     const now = new Date();
     const dateLabel = now.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
     const timeLabel = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
-    const folderTitle = `TabSweep — Stale ${dateLabel} ${timeLabel}`;
+    const folderTitle = `Swoosh — Stale ${dateLabel} ${timeLabel}`;
 
     // Save to bookmarks FIRST. If anything fails, abort and leave tabs open.
     try {
@@ -1760,7 +1717,7 @@ document.addEventListener('click', async (e) => {
         });
       }
     } catch (err) {
-      console.error('[tabsweep] Failed to save bookmarks:', err);
+      console.error('[swoosh] Failed to save bookmarks:', err);
       showToast('Failed to save bookmarks — tabs not closed');
       return;
     }
@@ -1977,7 +1934,7 @@ document.addEventListener('input', (e) => {
       archiveList.innerHTML = results.map(item => renderArchiveItem(item)).join('')
         || '<div style="font-size:12px;color:var(--muted);padding:8px 0">No results</div>';
     } catch (err) {
-      console.warn('[tabsweep] Archive search failed:', err);
+      console.warn('[swoosh] Archive search failed:', err);
     }
   }, 300);
 });
@@ -2021,7 +1978,7 @@ function usdIsGoogleSearchResultTab(url) {
 function usdIsNewTabPage(url) {
   if (!url) return true;
   if (url === 'chrome://newtab/' || url === 'edge://newtab/' || url === 'about:newtab') return true;
-  // TabSweep's own override page lives at chrome-extension://<id>/newtab.html
+  // Swoosh's own override page lives at chrome-extension://<id>/newtab.html
   if (url.startsWith('chrome-extension://') && url.includes('/newtab.html')) return true;
   return false;
 }
@@ -2081,6 +2038,17 @@ async function usdFetchGoogleSuggestions(query, seq) {
   }
 }
 
+function usdPositionDropdown() {
+  const el = usdEl();
+  const input = usdInputEl();
+  if (!el || !input) return;
+  const rect = input.getBoundingClientRect();
+  el.style.position = 'fixed';
+  el.style.top  = (rect.bottom + 6) + 'px';
+  el.style.left = rect.left + 'px';
+  el.style.width = rect.width + 'px';
+}
+
 function usdRender(tabs, suggestions) {
   usdItems = [
     ...tabs.map(t => ({ type: 'tab', tab: t })),
@@ -2097,6 +2065,8 @@ function usdRender(tabs, suggestions) {
     input.setAttribute('aria-expanded', 'false');
     return;
   }
+
+  usdPositionDropdown();
 
   const html = usdItems.map((item, idx) => {
     if (item.type === 'tab') {
@@ -2247,8 +2217,16 @@ document.addEventListener('click', (e) => {
     if (Number.isFinite(idx)) usdCommit(usdItems[idx]);
     return;
   }
-  if (!e.target.closest('.universal-search-wrap')) usdHide();
+  if (!e.target.closest('.universal-search-wrap') && !e.target.closest('#universalSearchDropdown')) usdHide();
 });
+
+// Move dropdown to body so it escapes the .container stacking context
+(function usdInit() {
+  const el = document.getElementById('universalSearchDropdown');
+  if (el && el.parentElement !== document.body) {
+    document.body.appendChild(el);
+  }
+})();
 
 
 /* ----------------------------------------------------------------
@@ -2265,7 +2243,7 @@ function applyTheme(theme) {
 }
 
 function getEffectiveTheme() {
-  const stored = localStorage.getItem('tabsweep-theme');
+  const stored = localStorage.getItem('swoosh-theme');
   if (stored === 'light' || stored === 'dark') return stored;
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
@@ -2277,7 +2255,7 @@ function applyPalette(palette) {
 }
 
 function getEffectivePalette() {
-  const stored = localStorage.getItem('tabsweep-palette');
+  const stored = localStorage.getItem('swoosh-palette');
   return stored === 'warm' ? 'warm' : 'cool';
 }
 
@@ -2286,18 +2264,18 @@ applyPalette(getEffectivePalette());
 
 document.getElementById('themeToggle')?.addEventListener('click', () => {
   const next = getEffectiveTheme() === 'dark' ? 'light' : 'dark';
-  localStorage.setItem('tabsweep-theme', next);
+  localStorage.setItem('swoosh-theme', next);
   applyTheme(next);
 });
 
 document.getElementById('paletteToggle')?.addEventListener('click', () => {
   const next = getEffectivePalette() === 'warm' ? 'cool' : 'warm';
-  localStorage.setItem('tabsweep-palette', next);
+  localStorage.setItem('swoosh-palette', next);
   applyPalette(next);
 });
 
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-  localStorage.removeItem('tabsweep-theme');
+  localStorage.removeItem('swoosh-theme');
   applyTheme(e.matches ? 'dark' : 'light');
 });
 

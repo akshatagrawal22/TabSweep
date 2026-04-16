@@ -68,7 +68,7 @@ async function updateBadge() {
 
 let notifyTimer = null;
 
-function notifyTabSweepPages() {
+function notifySwooshPages() {
   if (notifyTimer) return;
   notifyTimer = setTimeout(() => {
     notifyTimer = null;
@@ -78,7 +78,7 @@ function notifyTabSweepPages() {
 
 function onTabChange() {
   updateBadge();
-  notifyTabSweepPages();
+  notifySwooshPages();
 }
 
 // ─── Session tracking ────────────────────────────────────────────────────────

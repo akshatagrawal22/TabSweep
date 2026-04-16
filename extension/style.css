@@ -57,10 +57,17 @@ body::before {
 header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 48px;
   padding-bottom: 24px;
   border-bottom: 1px solid var(--warm-gray);
+}
+
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 0 24px;
 }
 
 .header-left .clock {
@@ -92,60 +99,6 @@ header {
 .header-right {
   display: flex;
   align-items: center;
-  padding-top: 4px;
-}
-
-/* ---- Quick access (frequent sites + quote + Google search) ---- */
-#quickAccess {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 40px;
-}
-
-#frequentSites + form {
-  margin-top: 32px;
-}
-
-#frequentSites {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-}
-
-.freq-site-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  border: 1px solid var(--warm-gray);
-  background: var(--card-bg);
-  transition: border-color 0.15s, box-shadow 0.15s;
-  text-decoration: none;
-}
-
-.freq-site-icon:hover {
-  border-color: var(--accent-amber);
-  box-shadow: 0 2px 8px var(--shadow);
-}
-
-#dailyQuote {
-  font-size: 13px;
-  color: var(--muted);
-  font-style: italic;
-  text-align: center;
-  max-width: 520px;
-  line-height: 1.6;
-}
-
-#dailyQuote .quote-author {
-  display: block;
-  font-style: normal;
-  font-size: 12px;
-  margin-top: 4px;
 }
 
 .google-search-box {
@@ -164,7 +117,7 @@ header {
 }
 
 #googleSearchInput {
-  width: 600px;
+  width: 420px;
   padding: 9px 14px 9px 34px;
   border: 1px solid var(--warm-gray);
   border-radius: 24px;
@@ -192,18 +145,15 @@ header {
 }
 
 .universal-search-dropdown {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  right: 0;
+  position: fixed;
   background: var(--card-bg);
   border: 1px solid var(--warm-gray);
   border-radius: 12px;
-  box-shadow: 0 8px 24px var(--shadow), 0 2px 6px var(--shadow);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   padding: 6px 0;
   max-height: 420px;
   overflow-y: auto;
-  z-index: 100;
+  z-index: 99999;
   text-align: left;
 }
 
@@ -309,10 +259,11 @@ header {
 
 /* ---- Tab cleanup banner ---- */
 .tab-cleanup-banner {
-  background: linear-gradient(135deg, rgba(var(--accent-amber-rgb), 0.04), rgba(var(--accent-amber-rgb), 0.09));
-  border: 1px solid rgba(var(--accent-amber-rgb), 0.18);
-  border-radius: 8px;
-  padding: 16px 24px;
+  background: linear-gradient(135deg, rgba(var(--accent-amber-rgb), 0.06), rgba(var(--accent-amber-rgb), 0.12));
+  border: 1px solid rgba(var(--accent-amber-rgb), 0.22);
+  border-left: 3px solid rgba(var(--accent-amber-rgb), 0.7);
+  border-radius: 10px;
+  padding: 18px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -322,14 +273,15 @@ header {
 .tab-cleanup-left {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
 }
 
 .tab-cleanup-icon {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  background: rgba(var(--accent-amber-rgb), 0.1);
+  background: rgba(var(--accent-amber-rgb), 0.15);
+  border: 1px solid rgba(var(--accent-amber-rgb), 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -356,8 +308,8 @@ header {
   font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 600;
-  padding: 8px 20px;
-  border-radius: 6px;
+  padding: 7px 18px;
+  border-radius: 20px;
   border: 1px solid transparent;
   background: var(--accent-amber);
   color: white;
@@ -366,6 +318,7 @@ header {
   white-space: nowrap;
   min-width: 110px;
   text-align: center;
+  letter-spacing: 0.01em;
 }
 
 .tab-cleanup-btn:hover {
@@ -382,7 +335,7 @@ header {
 .tab-cleanup-btn-secondary {
   background: transparent;
   color: var(--accent-amber);
-  border-color: rgba(var(--accent-amber-rgb), 0.4);
+  border-color: rgba(var(--accent-amber-rgb), 0.5);
 }
 
 .tab-cleanup-btn-secondary:hover {
@@ -1598,32 +1551,72 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
 /* ── Stale tabs banner ──────────────────────────────────────────── */
 
 .stale-banner {
-  background: linear-gradient(135deg, rgba(var(--accent-amber-rgb), 0.04), rgba(var(--accent-amber-rgb), 0.09));
-  border: 1px solid rgba(var(--accent-amber-rgb), 0.18);
-  border-radius: 8px;
-  padding: 16px 24px;
+  background: linear-gradient(135deg, rgba(var(--accent-amber-rgb), 0.06), rgba(var(--accent-amber-rgb), 0.12));
+  border: 1px solid rgba(var(--accent-amber-rgb), 0.22);
+  border-left: 3px solid rgba(var(--accent-amber-rgb), 0.7);
+  border-radius: 10px;
+  padding: 18px 20px;
   margin-bottom: 16px;
   animation: fadeUp 0.4s ease 0.15s both;
 }
 
-.stale-banner-header {
+/* ── Structural elements (shared across all variants) ───────────────── */
+
+.stale-banner-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
 }
 
-.stale-banner-header-left {
+.stale-banner-identity {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
 }
 
-.stale-banner-label {
-  font-size: 13px;
+.stale-banner-title {
+  font-size: 14px;
+  font-weight: 700;
   color: var(--ink);
-  line-height: 1.5;
+  letter-spacing: -0.01em;
 }
+
+.stale-banner-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--accent-amber);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+
+/* ── V2: Two-row compact ────────────────────────────────────────────── */
+/* row 1: icon/title/count + buttons · row 2: chips */
+
+.stale-banner--v2 {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.stale-banner--v2 .stale-banner-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+}
+.stale-banner--v2 .stale-banner-subtitle,
+.stale-banner--v2 .stale-banner-divider { display: none !important; }
+.stale-banner--v2 .stale-banner-actions { display: flex; flex-shrink: 0; gap: 8px; }
+.stale-banner--v2 .stale-banner-list    { padding-top: 14px; }
+
 
 .stale-info-icon {
   display: inline-flex;

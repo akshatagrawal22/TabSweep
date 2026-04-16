@@ -1,4 +1,4 @@
-# TabSweep
+<h1 align="left"><img src="extension/icons/icon.svg" width="32" valign="middle" /> TabSweep</h1>
 
 **Keep tabs on your tabs.**
 

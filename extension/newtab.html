@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TabSweep</title>
+
+  <link rel="stylesheet" href="fonts/fonts.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ================================================================
+       HEADER — greeting on the left
+       ================================================================ -->
+  <header>
+    <div class="header-left">
+      <h1 id="greeting"></h1>
+      <div class="clock" id="clockDisplay"></div>
+      <div class="date" id="dateDisplay"></div>
+    </div>
+    <div class="header-right">
+      <button class="theme-toggle" id="paletteToggle" title="Toggle palette">
+        <svg class="theme-icon palette-icon-warm" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.468 5.99 5.99 0 0 0-1.925 3.547 5.975 5.975 0 0 1-2.133-1.001A3.75 3.75 0 0 0 12 18Z" /></svg>
+        <svg class="theme-icon palette-icon-cool" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17L9 20M12 17L15 20M12 17V12M12 17V21M12 7L9 4M12 7L15 4M12 7V12M12 7V3M12 12L7.66985 9.49995M12 12L16.3301 14.4999M12 12L7.66985 14.4999M12 12L16.3301 9.49995M16.3301 14.4999L17.4282 18.598M16.3301 14.4999L20.4282 13.4019M16.3301 14.4999L19.7943 16.5M7.66985 9.49995L3.57178 10.598M7.66985 9.49995L6.57178 5.40187M7.66985 9.49995L4.20581 7.5M16.3301 9.49995L20.4282 10.598M16.3301 9.49995L17.4282 5.40187M16.3301 9.49995L19.7943 7.5M7.66985 14.4999L6.57178 18.598M7.66985 14.4999L3.57178 13.4019M7.66985 14.4999L4.20581 16.5" /></svg>
+      </button>
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+        <svg class="theme-icon theme-icon-light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" /></svg>
+        <svg class="theme-icon theme-icon-dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" /></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ================================================================
+       QUICK ACCESS — frequent sites + quote + Google search
+       ================================================================ -->
+  <section id="quickAccess">
+    <div id="frequentSites"></div>
+    <form id="googleSearchForm" action="https://www.google.com/search" method="get" target="_self">
+      <div class="universal-search-wrap">
+        <div class="google-search-box">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
+          <input type="text" name="q" id="googleSearchInput" placeholder="Search tabs &amp; Google..." autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="universalSearchDropdown" aria-expanded="false">
+        </div>
+        <div class="universal-search-dropdown" id="universalSearchDropdown" role="listbox" hidden></div>
+      </div>
+    </form>
+    <div id="dailyQuote"></div>
+  </section>
+
+  <!-- ================================================================
+       TABSWEEP DUPES BANNER
+       ================================================================ -->
+  <div class="tab-cleanup-banner" id="tabSweepDupeBanner" style="display:none">
+    <div class="tab-cleanup-left">
+      <div class="tab-cleanup-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
+        </svg>
+      </div>
+      <div class="tab-cleanup-text">
+        You have <strong id="tabSweepDupeCount"></strong> TabSweep tabs open. Keep just this one?
+      </div>
+    </div>
+    <button class="tab-cleanup-btn" data-action="close-tabsweep-dupes">Close extras</button>
+  </div>
+
+  <!-- ================================================================
+       MAIN CONTENT AREA
+       ================================================================ -->
+  <div class="dashboard-columns" id="dashboardColumns">
+
+    <!-- LEFT COLUMN: Open tabs -->
+    <div class="active-section" id="openTabsSection" style="display:none">
+      <div class="section-header">
+        <h2 id="openTabsSectionTitle">Right now</h2>
+        <div class="section-line"></div>
+        <div class="section-count" id="openTabsSectionCount"></div>
+      </div>
+      <div class="stale-banner" id="staleBanner" style="display:none">
+        <div class="stale-banner-header">
+          <div class="stale-banner-header-left">
+            <div class="tab-cleanup-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
+            </div>
+            <div class="stale-banner-label" id="staleBannerLabel"></div>
+          </div>
+          <div class="stale-banner-actions">
+            <button class="tab-cleanup-btn tab-cleanup-btn-primary" data-action="save-and-close-stale-tabs" id="staleBannerSaveBtn">Save &amp; close all</button>
+            <button class="tab-cleanup-btn tab-cleanup-btn-secondary" data-action="close-stale-tabs" id="staleBannerBtn">Close all</button>
+          </div>
+        </div>
+        <div class="stale-banner-list" id="staleBannerList"></div>
+      </div>
+      <div class="missions" id="openTabsMissions"></div>
+    </div>
+
+    <!-- RIGHT COLUMN: Saved for Later checklist -->
+    <div class="deferred-column" id="deferredColumn" style="display:none">
+      <div class="section-header">
+        <h2>Saved for later</h2>
+        <div class="section-line"></div>
+        <div class="section-count" id="deferredCount"></div>
+      </div>
+      <div class="deferred-list" id="deferredList"></div>
+      <div class="deferred-empty" id="deferredEmpty" style="display:none">
+        Nothing saved. Living in the moment.
+      </div>
+      <div class="deferred-archive" id="deferredArchive" style="display:none">
+        <button class="archive-toggle" id="archiveToggle">
+          <svg class="archive-chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+          Archive
+          <span class="archive-count" id="archiveCount"></span>
+        </button>
+        <div class="archive-body" id="archiveBody">
+          <input type="text" class="archive-search" id="archiveSearch" placeholder="Search archived tabs...">
+          <div class="archive-list" id="archiveList"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end .dashboard-columns -->
+
+  <!-- ================================================================
+       STATS SECTION
+       ================================================================ -->
+  <div class="stats-section" id="statsSection" style="display:none">
+    <div class="section-header">
+      <h2>Today</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="stats-grid" id="statsGrid"></div>
+  </div>
+
+  <!-- ================================================================
+       FOOTER
+       ================================================================ -->
+  <footer>
+    <div class="footer-stats">
+      <div class="stat">
+        <div class="stat-num" id="statTabs">—</div>
+        <div class="stat-label">Open tabs</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="statStale">—</div>
+        <div class="stat-label">Stale</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="statActiveTime">—</div>
+        <div class="stat-label">Active today</div>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- end .container -->
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+  </svg>
+  <span id="toastText"></span>
+</div>
+
+<!-- Storage layer (chrome.storage adapter) -->
+<script src="storage.js"></script>
+<!-- Main dashboard logic -->
+<script src="app.js"></script>
+</body>
+</html>

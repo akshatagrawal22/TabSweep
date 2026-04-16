@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TabSweep — Privacy Policy</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      max-width: 720px;
+      margin: 60px auto;
+      padding: 0 24px;
+      color: #1a1a1a;
+      line-height: 1.7;
+    }
+    h1 { font-size: 2rem; margin-bottom: 4px; }
+    .subtitle { color: #666; margin-bottom: 48px; }
+    h2 { font-size: 1.15rem; margin-top: 40px; }
+    ul { padding-left: 20px; }
+    li { margin-bottom: 6px; }
+    a { color: #2563eb; }
+  </style>
+</head>
+<body>
+
+<h1>TabSweep — Privacy Policy</h1>
+<p class="subtitle">Last updated: April 16, 2026</p>
+
+<h2>Overview</h2>
+<p>
+  TabSweep is a browser extension that replaces your new tab page with a dashboard
+  showing all your open tabs grouped by domain. This policy explains what data the
+  extension accesses and how it is handled.
+</p>
+
+<h2>Data the extension accesses</h2>
+<ul>
+  <li><strong>Open tab URLs and titles</strong> — read to display your tabs grouped by domain on the dashboard.</li>
+  <li><strong>Tab activity timestamps</strong> — tracked locally to detect stale tabs (idle for 4+ hours) and compute time spent per domain.</li>
+  <li><strong>Bookmarked tabs ("Saved for later")</strong> — URLs and titles you choose to save are stored locally so they persist across sessions.</li>
+</ul>
+
+<h2>How your data is used</h2>
+<ul>
+  <li>All data is used exclusively to power the features visible to you in the extension UI.</li>
+  <li>Session statistics (time per domain, tabs closed per day) are aggregated locally and displayed in the "Today" section of the dashboard.</li>
+  <li>No data is used for advertising, profiling, or any purpose beyond showing you your own tab activity.</li>
+</ul>
+
+<h2>Data storage</h2>
+<ul>
+  <li>All data is stored in <code>chrome.storage.local</code> — on your device only.</li>
+  <li>Session stats older than 30 days are automatically deleted.</li>
+  <li>No database, no server, no cloud sync of any kind.</li>
+</ul>
+
+<h2>Data sharing</h2>
+<p>
+  TabSweep does not transmit, sell, share, or expose any of your browsing data to any
+  third party — ever.
+</p>
+<p>
+  The extension makes limited external requests to Google's services for user experience:
+</p>
+<ul>
+  <li><strong>Favicon requests</strong> — when a tab's native favicon is unavailable, the extension requests a favicon from Google. No browsing data is transmitted; only the domain name is sent.</li>
+  <li><strong>Search suggestions</strong> — when you type in the universal search bar, queries are sent to Google's suggestion service to show autocomplete results. These requests contain only what you type, not your browsing history.</li>
+</ul>
+<p>
+  No browsing data (tab URLs, titles, domains) is ever sent externally.
+</p>
+
+<h2>Permissions explained</h2>
+<ul>
+  <li><strong>tabs</strong> — required to read tab URLs, titles, and activity for the dashboard.</li>
+  <li><strong>activeTab</strong> — required to detect which tab is currently in focus for session timing.</li>
+  <li><strong>storage</strong> — required to persist saved tabs and daily stats locally on your device.</li>
+  <li><strong>topSites</strong> — required to display your most visited sites on the dashboard.</li>
+  <li><strong>bookmarks</strong> — required to save stale tabs to a bookmark folder before closing them.</li>
+</ul>
+
+<h2>Children's privacy</h2>
+<p>
+  TabSweep does not knowingly collect any information from children under 13.
+  The extension collects no personal information from any user.
+</p>
+
+<h2>Changes to this policy</h2>
+<p>
+  If this policy changes, the updated version will be posted at this URL with a revised
+  "Last updated" date. Continued use of the extension after changes constitutes acceptance
+  of the updated policy.
+</p>
+
+<h2>Contact</h2>
+<p>
+  Questions? Open an issue at
+  <a href="https://github.com/akshatagrawal22/TabSweep/issues">
+    github.com/akshatagrawal22/TabSweep/issues
+  </a>
+</p>
+
+</body>
+</html>

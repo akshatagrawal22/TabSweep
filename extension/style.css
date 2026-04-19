@@ -554,8 +554,7 @@ header {
     border-color var(--dur-base) ease;
 }
 
-/* Colored top accent — soft 2px stripe (was 3px, harsher).
-   Sits inside the border-radius via overflow:hidden on parent. */
+/* Amber top accent — only shown on cards with duplicate tabs (functional signal). */
 .mission-card::before {
   content: '';
   position: absolute;
@@ -563,18 +562,10 @@ header {
   left: 0;
   right: 0;
   height: 2px;
-  background: var(--warm-gray);
+  background: transparent;
 }
 
-.mission-card.has-active-bar::before { background: var(--status-active); }
 .mission-card.has-amber-bar::before { background: var(--accent-amber); }
-.mission-card.has-neutral-bar::before { background: var(--warm-gray); }
-.mission-card.category-work::before { background: var(--category-work); }
-.mission-card.category-social::before { background: var(--category-social); }
-.mission-card.category-dev::before { background: var(--category-dev); }
-.mission-card.category-media::before { background: var(--category-media); }
-.mission-card.category-ai::before { background: var(--category-ai); }
-.mission-card.category-jio::before { background: var(--category-jio); }
 
 .mission-card:hover {
   box-shadow: var(--card-shadow-hover), inset 0 1px 0 var(--card-highlight);
@@ -597,9 +588,6 @@ header {
 }
 
 /* Old side status bar — hidden, replaced by top border via ::before */
-.status-bar {
-  display: none;
-}
 
 .mission-content {
   min-width: 0;
@@ -613,11 +601,46 @@ header {
 .mission-top {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 6px;
-  flex-wrap: wrap;
+  gap: 8px;
   cursor: pointer;
 }
+
+.card-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.card-close-btn,
+.card-expand-btn,
+.card-dupe-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  color: var(--muted);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
+  flex-shrink: 0;
+}
+
+.card-close-btn:hover { background: rgba(181, 90, 106, 0.12); color: var(--accent-rose); }
+.card-expand-btn:hover { background: rgba(var(--accent-amber-rgb), 0.08); color: var(--ink); }
+.card-dupe-icon:hover { background: rgba(var(--accent-amber-rgb), 0.08); color: var(--accent-amber); }
+
+.card-close-btn:focus-visible,
+.card-expand-btn:focus-visible,
+.card-dupe-icon:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+.card-close-btn svg,
+.card-expand-btn svg,
+.card-dupe-icon svg { width: 14px; height: 14px; }
 
 .mission-name {
   font-weight: 600;
@@ -625,6 +648,23 @@ header {
   color: var(--ink);
   letter-spacing: -0.2px;
 }
+
+/* Category tag — small label on card showing work/social/dev/media/ai */
+.cat-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.cat-tag-work   { color: var(--category-work);   background: rgba(74, 122, 181, 0.12); }
+.cat-tag-social { color: var(--category-social); background: rgba(74, 154, 90,  0.12); }
+.cat-tag-dev    { color: var(--category-dev);    background: rgba(138, 106, 181, 0.12); }
+.cat-tag-media  { color: var(--category-media);  background: rgba(181, 90, 106, 0.12); }
+.cat-tag-ai     { color: var(--category-ai);     background: rgba(181, 130, 58, 0.12); }
 
 /* Tab indicator badge — shows how many Chrome tabs are still open for this mission */
 .open-tabs-badge {
@@ -851,16 +891,7 @@ header {
   letter-spacing: 1px;
 }
 
-/* ---- Actions row ----
-   Default .action-btn is a compact ghost button (neutral, recedes).
-   Variants (.primary, .close-tabs, .save-tabs, .danger) tint the ghost
-   so there is at most ONE visually dominant action per card row. */
-.actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-  flex-wrap: wrap;
-}
+
 
 .action-btn {
   font-family: 'DM Sans', sans-serif;

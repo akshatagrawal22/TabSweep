@@ -968,13 +968,6 @@ function renderDomainCard(group) {
     ${tabCount} tab${tabCount !== 1 ? 's' : ''} open
   </span>`;
 
-  // Duplicate warning badge
-  const dupeBadge = hasDupes
-    ? `<span class="open-tabs-badge" style="color: var(--accent-amber); background: rgba(var(--accent-amber-rgb), 0.08);">
-        ${totalExtras} duplicate${totalExtras !== 1 ? 's' : ''}
-      </span>`
-    : '';
-
   // Deduplicate for display: show each URL once with (Nx) badge if duplicated
   const seen = new Set();
   const uniqueTabs = [];
@@ -1018,45 +1011,40 @@ function renderDomainCard(group) {
     </div>`;
   }).join('') + (extraCount > 0 ? buildOverflowChips(uniqueTabs.slice(8), urlCounts) : '');
 
-  const statusBarStyle = hasDupes ? ' style="background: var(--accent-amber);"' : '';
-
-  let actionsHtml = `
-    <button class="action-btn close-tabs" data-action="close-domain-tabs" data-domain-id="${stableId}">
-      ${ICONS.close}
-      Close all ${tabCount} tab${tabCount !== 1 ? 's' : ''}
-    </button>
-    <button class="action-btn action-btn-ghost expand-btn" title="Show tabs">
-      <svg class="expand-chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
-    </button>`;
-
+  let dupeIcon = '';
   if (hasDupes) {
     const dupeUrlsEncoded = dupeUrls.map(([url]) => encodeURIComponent(url)).join(',');
-    actionsHtml += `
-      <button class="action-btn" data-action="dedup-keep-one" data-dupe-urls="${dupeUrlsEncoded}">
-        Close ${totalExtras} duplicate${totalExtras !== 1 ? 's' : ''}
+    dupeIcon = `
+      <button class="card-dupe-icon" data-action="dedup-keep-one" data-dupe-urls="${dupeUrlsEncoded}" title="Close ${totalExtras} duplicate${totalExtras !== 1 ? 's' : ''}">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" /></svg>
       </button>`;
   }
 
   const cardName = isLanding ? 'Homepages' : friendlyDomain(group.domain);
   const category = getDomainCategory(group.domain);
-  const catClass = category !== 'default' ? ` category-${category}` : '';
-  const cardClass = hasDupes ? 'has-amber-bar' : ('has-neutral-bar' + catClass);
+  const cardClass = hasDupes ? 'has-amber-bar' : 'has-neutral-bar';
+  const catTag = (category !== 'default' && !isLanding)
+    ? `<span class="cat-tag cat-tag-${category}">${category}</span>`
+    : '';
 
   return `
     <div class="mission-card domain-card ${cardClass}" data-domain-id="${stableId}">
-      <div class="status-bar"${statusBarStyle}></div>
       <div class="mission-content">
         <div class="mission-top">
+          ${catTag}
           <span class="mission-name">${cardName}</span>
           ${tabBadge}
-          ${dupeBadge}
+          <div class="card-top-actions">
+            ${dupeIcon}
+            <button class="card-close-btn" data-action="close-domain-tabs" data-domain-id="${stableId}" title="Close all ${tabCount} tab${tabCount !== 1 ? 's' : ''}">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+            </button>
+            <button class="card-expand-btn" title="Show tabs">
+              <svg class="expand-chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+            </button>
+          </div>
         </div>
         <div class="mission-pages collapsed-chips">${pageChips}</div>
-        <div class="actions">${actionsHtml}</div>
-      </div>
-      <div class="mission-meta">
-        <div class="mission-page-count">${tabCount}</div>
-        <div class="mission-page-label">tabs</div>
       </div>
     </div>`;
 }
@@ -1931,9 +1919,7 @@ document.addEventListener('click', async (e) => {
       });
       // Remove amber highlight from the card border
       card.classList.remove('has-amber-bar');
-      card.classList.add('has-neutral-bar');
-      const statusBar = card.querySelector('.status-bar');
-      if (statusBar) statusBar.style.background = '';
+      card.classList.remove('has-amber-bar');
     }
 
     showToast(`Closed duplicates, kept one copy each`);

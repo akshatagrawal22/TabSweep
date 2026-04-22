@@ -28,15 +28,13 @@
       </div>
     </div>
     <div class="header-center">
-      <form id="googleSearchForm" action="https://www.google.com/search" method="get" target="_self">
-        <div class="universal-search-wrap">
-          <div class="google-search-box">
-            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
-            <input type="text" name="q" id="googleSearchInput" placeholder="Search tabs &amp; Google… ( / or ⌘K )" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="universalSearchDropdown" aria-expanded="false">
-          </div>
-          <div class="universal-search-dropdown" id="universalSearchDropdown" role="listbox" hidden></div>
+      <div class="universal-search-wrap">
+        <div class="google-search-box">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
+          <input type="text" id="googleSearchInput" placeholder="Search tabs… ( / or ⌘K )" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="universalSearchDropdown" aria-expanded="false">
         </div>
-      </form>
+        <div class="universal-search-dropdown" id="universalSearchDropdown" role="listbox" hidden></div>
+      </div>
     </div>
     <div class="header-right">
       <div class="settings-wrap">
@@ -75,6 +73,7 @@
 
     <!-- LEFT COLUMN: Open tabs -->
     <div class="active-section" id="openTabsSection" style="display:none">
+      <div class="col-heading">Open Tabs</div>
       <div class="stale-banner" id="staleBanner" role="status" aria-live="polite" style="display:none">
         <div class="stale-banner-top">
           <div class="stale-banner-identity" id="staleBannerIdentity">
@@ -98,6 +97,7 @@
 
     <!-- RIGHT COLUMN: Saved for Later checklist -->
     <div class="deferred-column" id="deferredColumn" style="display:none">
+      <div class="col-heading">Saved for Later</div>
       <div class="deferred-list" id="deferredList"></div>
       <div class="deferred-empty" id="deferredEmpty" style="display:none">
         Nothing saved. Living in the moment.

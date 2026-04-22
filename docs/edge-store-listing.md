@@ -41,7 +41,7 @@ Swoosh
 
 ### Short description (max 250 characters)
 ```
-Keep tabs on your tabs. Replaces your new tab page with a clean dashboard that groups all open tabs by domain — universal search, duplicate cleanup, and save links for later.
+Keep tabs on your tabs. Replaces your new tab page with a clean dashboard that groups all open tabs by domain — instant tab search, duplicate cleanup, and save links for later.
 ```
 Character count: 173 ✓
 
@@ -52,8 +52,8 @@ Swoosh replaces your new tab page with a dashboard that actually helps you manag
 SEE EVERYTHING AT ONCE
 All your open tabs are grouped by domain on a clean grid. No more squinting at 30 tiny tab titles — you can see what you have open at a glance.
 
-UNIVERSAL SEARCH
-Press / or Cmd+K to search your tabs and Google simultaneously. Arrow keys to navigate, Enter to switch or search.
+TAB SEARCH
+Press / or Cmd+K to instantly jump to any open tab. Arrow keys to navigate, Enter to switch.
 
 LANDING PAGES GROUP
 Gmail, YouTube, LinkedIn, X, GitHub pulled into their own card — close them all with one click.
@@ -71,7 +71,7 @@ LIGHT + DARK MODE
 Toggle between cool (blue) and warm (amber) palettes.
 
 PRIVACY-FIRST
-Your tabs stay on your device. External requests limited to favicons and search suggestions only.
+Your tabs stay on your device. No external requests — favicons load directly from tabs.
 ```
 
 ### Category
@@ -92,13 +92,12 @@ When prompted to justify permissions during submission, use these:
 
 | Permission | Justification |
 |------------|--------------|
-| `tabs` | Required to read tab URLs and titles to display them grouped by domain on the dashboard. |
-| `activeTab` | Required to detect which tab has focus so session timing per domain works correctly. |
+| `tabs` | Required to read tab URLs, titles, and activity timestamps to display them grouped by domain on the dashboard. |
 | `storage` | Required to persist "Saved for later" tabs and daily usage stats locally on the user's device. |
-| `topSites` | Required to display your most visited sites for quick access. |
 | `bookmarks` | Required to save stale tabs to a bookmark folder before closing them. |
+| `search` | Required to trigger a web search using the user's default search engine from the tab search bar. |
 
-Host permissions for `suggestqueries.google.com` and `www.google.com` are used to power the universal search dropdown with Google suggestions.
+No host permissions are required. All tab data is read locally via the `tabs` API.
 
 ---
 
@@ -126,8 +125,8 @@ Wait ~5 minutes for GitHub Pages to publish before submitting.
 
 ## Version notes (for "What's new" on future updates)
 
-**1.3.0** — Universal search, palette toggle, session persistence
-- Universal search: `/` or `Cmd+K` opens dropdown with tabs + Google suggestions
+**1.3.0** — Tab search, palette toggle, session persistence
+- Tab search: `/` or `Cmd+K` opens dropdown to instantly jump to any open tab
 - Palette toggle: switch between cool (blue) and warm (amber) palettes
 - Session timestamps persist across service worker restarts
 - Stale tab threshold raised to 4 hours

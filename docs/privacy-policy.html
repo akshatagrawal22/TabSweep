@@ -24,7 +24,7 @@
 <body>
 
 <h1>Swoosh — Privacy Policy</h1>
-<p class="subtitle">Last updated: April 20, 2026</p>
+<p class="subtitle">Last updated: April 22, 2026</p>
 
 <h2>Overview</h2>
 <p>
@@ -36,7 +36,7 @@
 <h2>Data the extension accesses</h2>
 <ul>
   <li><strong>Open tab URLs and titles</strong> — read to display your tabs grouped by domain on the dashboard.</li>
-  <li><strong>Tab activity timestamps</strong> — tracked locally to detect stale tabs (idle for 4+ hours) and compute time spent per domain.</li>
+  <li><strong>Tab activity timestamps</strong> — tracked locally to detect stale tabs (idle for a configurable duration, default 4 hours) and compute time spent per domain.</li>
   <li><strong>Bookmarked tabs ("Saved for later")</strong> — URLs and titles you choose to save are stored locally so they persist across sessions.</li>
 </ul>
 
@@ -57,16 +57,8 @@
 <h2>Data sharing</h2>
 <p>
   Swoosh does not transmit, sell, share, or expose any of your browsing data to any
-  third party — ever.
-</p>
-<p>
-  The extension makes one external request to Google's services for user experience:
-</p>
-<ul>
-  <li><strong>Search suggestions</strong> — when you type in the universal search bar, the text you type is sent to Google's suggestion API to show autocomplete results. This contains only your search query, not your browsing history or open tab data.</li>
-</ul>
-<p>
-  No browsing data (tab URLs, titles, domains) is ever sent externally.
+  third party — ever. The extension makes no external network requests. All data
+  stays on your device.
 </p>
 
 <h2>Permissions explained</h2>
@@ -74,6 +66,7 @@
   <li><strong>tabs</strong> — required to read tab URLs, titles, favicons, and activity timestamps for the dashboard.</li>
   <li><strong>storage</strong> — required to persist saved tabs, daily stats, and user preferences locally on your device.</li>
   <li><strong>bookmarks</strong> — required to save stale tabs to a bookmark folder before closing them.</li>
+  <li><strong>search</strong> — required to trigger a web search using your default search engine when you press Enter in the tab search bar.</li>
 </ul>
 
 <h2>Children's privacy</h2>

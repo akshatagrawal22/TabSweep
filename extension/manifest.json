@@ -1,11 +1,10 @@
 {
   "manifest_version": 3,
   "name": "Swoosh",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "minimum_chrome_version": "120",
   "description": "Your tabs, organized. Swoosh groups open tabs by site, surfaces stale ones, and clears clutter — with a satisfying swoosh.",
-  "permissions": ["tabs", "storage", "bookmarks"],
-  "host_permissions": ["https://suggestqueries.google.com/*"],
+  "permissions": ["tabs", "storage", "bookmarks", "search"],
   "chrome_url_overrides": { "newtab": "newtab.html" },
   "background": { "service_worker": "background.js" },
   "action": {

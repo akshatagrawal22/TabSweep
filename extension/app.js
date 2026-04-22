@@ -926,7 +926,7 @@ function buildOverflowChips(hiddenTabs, urlCounts = {}) {
     const chipClass = (count > 1 ? ' chip-has-dupes' : '') + (tab.pinned ? ' chip-pinned' : '');
     const safeUrl = (tab.url || '').replace(/"/g, '&quot;');
     const safeTitle = label.replace(/"/g, '&quot;');
-    const faviconUrl = tab.favIconUrl || (tab.url ? `https://www.google.com/s2/favicons?domain=${new URL(tab.url).hostname}&sz=32` : '');
+    const faviconUrl = tab.favIconUrl || '';
     const pinTag = tab.pinned ? `<span class="chip-pin-icon">${ICONS.pin}</span>` : '';
     return `<div class="page-chip clickable${chipClass}" data-action="focus-tab" data-tab-url="${safeUrl}" data-tooltip="${safeTitle}">
       ${pinTag}${faviconUrl ? `<img class="chip-favicon favicon-img" src="${faviconUrl}" alt="">` : ''}
@@ -1006,7 +1006,7 @@ function renderDomainCard(group) {
     const chipClass = (count > 1 ? ' chip-has-dupes' : '') + (tab.pinned ? ' chip-pinned' : '');
     const safeUrl = (tab.url || '').replace(/"/g, '&quot;');
     const safeTitle = label.replace(/"/g, '&quot;');
-    const faviconUrl = tab.favIconUrl || (tab.url ? `https://www.google.com/s2/favicons?domain=${new URL(tab.url).hostname}&sz=32` : '');
+    const faviconUrl = tab.favIconUrl || '';
     const pinTag = tab.pinned ? `<span class="chip-pin-icon">${ICONS.pin}</span>` : '';
     return `<div class="page-chip clickable${chipClass}" data-action="focus-tab" data-tab-url="${safeUrl}" data-tooltip="${safeTitle}">
       ${pinTag}${faviconUrl ? `<img class="chip-favicon favicon-img" src="${faviconUrl}" alt="">` : ''}
@@ -2032,21 +2032,17 @@ document.addEventListener('input', (e) => {
 
 
 /* ----------------------------------------------------------------
-   UNIVERSAL SEARCH DROPDOWN (tabs + Google suggestions)
+   UNIVERSAL SEARCH DROPDOWN (tabs)
    Hotkeys: `/` or Cmd/Ctrl+K focuses the search input.
    Reuses: openTabs (app.js:29), focusTabsByUrls (app.js:79)
    ---------------------------------------------------------------- */
 
-const USD_MAX_TAB_RESULTS    = 4;
-const USD_MAX_GOOGLE_RESULTS = 6;
-const USD_DEBOUNCE_MS        = 180;
+const USD_MAX_TAB_RESULTS = 4;
 
 const USD_SEARCH_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>`;
 
-let usdItems      = [];
-let usdActiveIdx  = -1;
-let usdFetchTimer = null;
-let usdFetchSeq   = 0;
+let usdItems     = [];
+let usdActiveIdx = -1;
 
 function usdEscapeHtml(s) {
   return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -2114,20 +2110,6 @@ function usdRecentTabs() {
     .slice(0, USD_MAX_TAB_RESULTS);
 }
 
-async function usdFetchGoogleSuggestions(query, seq) {
-  try {
-    const url = `https://suggestqueries.google.com/complete/search?client=chrome&q=${encodeURIComponent(query)}`;
-    const resp = await fetch(url);
-    if (seq !== usdFetchSeq) return null;
-    if (!resp.ok) return [];
-    const data = await resp.json();
-    return Array.isArray(data) && Array.isArray(data[1])
-      ? data[1].slice(0, USD_MAX_GOOGLE_RESULTS)
-      : [];
-  } catch {
-    return [];
-  }
-}
 
 function usdPositionDropdown() {
   const el = usdEl();
@@ -2140,11 +2122,9 @@ function usdPositionDropdown() {
   el.style.width = rect.width + 'px';
 }
 
-function usdRender(tabs, suggestions) {
-  usdItems = [
-    ...tabs.map(t => ({ type: 'tab', tab: t })),
-    ...suggestions.map(s => ({ type: 'google', query: s })),
-  ];
+function usdRender(tabs, query) {
+  usdItems = tabs.map(t => ({ type: 'tab', tab: t }));
+  if (query) usdItems.push({ type: 'search', query });
 
   const el = usdEl();
   const input = usdInputEl();
@@ -2160,27 +2140,27 @@ function usdRender(tabs, suggestions) {
   usdPositionDropdown();
 
   const html = usdItems.map((item, idx) => {
-    if (item.type === 'tab') {
-      const t = item.tab;
-      const favicon = t.favIconUrl
-        ? `<img src="${usdEscapeHtml(t.favIconUrl)}" alt="">`
-        : USD_SEARCH_ICON_SVG;
-      let hostPath = '';
-      try {
-        const u = new URL(t.url);
-        hostPath = u.hostname + (u.pathname && u.pathname !== '/' ? u.pathname : '');
-      } catch {}
-      return `<div class="usd-row usd-row-tab" role="option" data-usd-idx="${idx}">`
-           +   `<span class="usd-row-icon">${favicon}</span>`
-           +   `<span class="usd-row-text">${usdEscapeHtml(t.title || t.url)}`
-           +     (hostPath ? `<span class="usd-row-url">— ${usdEscapeHtml(hostPath)}</span>` : '')
-           +   `</span>`
-           +   `<span class="usd-row-switch">Switch to Tab<span class="usd-row-switch-arrow">→</span></span>`
+    if (item.type === 'search') {
+      return `<div class="usd-row usd-row-google" role="option" data-usd-idx="${idx}">`
+           +   `<span class="usd-row-icon">${USD_SEARCH_ICON_SVG}</span>`
+           +   `<span class="usd-row-text">Search web for <strong>${usdEscapeHtml(item.query)}</strong></span>`
            + `</div>`;
     }
-    return `<div class="usd-row usd-row-google" role="option" data-usd-idx="${idx}">`
-         +   `<span class="usd-row-icon">${USD_SEARCH_ICON_SVG}</span>`
-         +   `<span class="usd-row-text">${usdEscapeHtml(item.query)}</span>`
+    const t = item.tab;
+    const favicon = t.favIconUrl
+      ? `<img src="${usdEscapeHtml(t.favIconUrl)}" alt="">`
+      : USD_SEARCH_ICON_SVG;
+    let hostPath = '';
+    try {
+      const u = new URL(t.url);
+      hostPath = u.hostname + (u.pathname && u.pathname !== '/' ? u.pathname : '');
+    } catch {}
+    return `<div class="usd-row usd-row-tab" role="option" data-usd-idx="${idx}">`
+         +   `<span class="usd-row-icon">${favicon}</span>`
+         +   `<span class="usd-row-text">${usdEscapeHtml(t.title || t.url)}`
+         +     (hostPath ? `<span class="usd-row-url">— ${usdEscapeHtml(hostPath)}</span>` : '')
+         +   `</span>`
+         +   `<span class="usd-row-switch">Switch to Tab<span class="usd-row-switch-arrow">→</span></span>`
          + `</div>`;
   }).join('');
 
@@ -2211,40 +2191,29 @@ function usdHide() {
 }
 
 function usdShowRecent() {
-  if (usdFetchTimer) { clearTimeout(usdFetchTimer); usdFetchTimer = null; }
-  usdRender(usdRecentTabs(), []);
+  usdRender(usdRecentTabs());
 }
 
 function usdOnInput(e) {
   const query = e.target.value.trim();
   if (!query) { usdShowRecent(); return; }
-
-  const tabs = usdSearchTabs(query);
-  usdRender(tabs, []);
-
-  if (usdFetchTimer) clearTimeout(usdFetchTimer);
-  usdFetchTimer = setTimeout(async () => {
-    usdFetchTimer = null;
-    const seq = ++usdFetchSeq;
-    const suggestions = await usdFetchGoogleSuggestions(query, seq);
-    if (suggestions === null) return;
-    if (e.target.value.trim() !== query) return;
-    usdRender(tabs, suggestions);
-  }, USD_DEBOUNCE_MS);
+  usdRender(usdSearchTabs(query), query);
 }
 
 function usdCommit(item) {
   if (!item) return;
-  if (item.type === 'tab') {
+  if (item.type === 'search') {
+    usdSearch(item.query);
+  } else {
     focusTabsByUrls([item.tab.url]);
     usdHide();
-  } else {
-    const input = usdInputEl();
-    const form  = document.getElementById('googleSearchForm');
-    if (!input || !form) return;
-    input.value = item.query;
-    form.submit();
   }
+}
+
+function usdSearch(query) {
+  if (!query) return;
+  chrome.search.query({ text: query, disposition: 'CURRENT_TAB' });
+  usdHide();
 }
 
 document.addEventListener('input', (e) => {
@@ -2283,6 +2252,11 @@ document.addEventListener('keydown', (e) => {
   }
 
   const el = usdEl();
+  if (e.key === 'Enter' && (!el || el.hidden || usdItems.length === 0)) {
+    e.preventDefault();
+    usdSearch(input.value.trim());
+    return;
+  }
   if (!el || el.hidden || usdItems.length === 0) return;
 
   if (e.key === 'ArrowDown') {
@@ -2294,9 +2268,11 @@ document.addEventListener('keydown', (e) => {
     usdActiveIdx = (usdActiveIdx - 1 + usdItems.length) % usdItems.length;
     usdUpdateActive();
   } else if (e.key === 'Enter') {
+    e.preventDefault();
     if (usdActiveIdx >= 0 && usdItems[usdActiveIdx]) {
-      e.preventDefault();
       usdCommit(usdItems[usdActiveIdx]);
+    } else {
+      usdSearch(input.value.trim());
     }
   }
 });

@@ -30,7 +30,7 @@ Open a new tab — you'll see Swoosh.
 ## Features
 
 - **Tab grouping** — Open tabs grouped by domain on a clean grid
-- **Universal search** — Press `/` or `Cmd+K` to search tabs and Google
+- **Tab search** — Press `/` or `Cmd+K` to instantly jump to any open tab
 - **Landing pages** — Gmail, YouTube, X, LinkedIn grouped together
 - **Duplicate cleanup** — One-click to close duplicate tabs
 - **Stale tabs** — Tabs you haven't touched in a while, configurable from 1 hour to 2 weeks
